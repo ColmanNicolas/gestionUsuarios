@@ -1,7 +1,5 @@
 
-//nombres de lista del Local Storage
-
-function codigosLocalStorage(codigo) {
+function codigosLocalStorage(codigo) {   //nombres de listas del Local Storage
   const claveRegistroUsuario = "listaRegisto";
   const claveAltaUsuario = "listaAlta";
   const claveborradoUsuario = "listaBorrado";
@@ -52,8 +50,6 @@ function IDimportantes(codigo) { //formularios , tablas, botones
       break;
   }
 }
-
-
 function manejarFormularioUsuario(event) {
   event.preventDefault();
   const correo = document.getElementById("inputEmail");
@@ -74,41 +70,34 @@ function manejarFormularioUsuario(event) {
   }
   limpiarYenfocarPrimerImput(IDimportantes(0), "email");
 }
+function formularioModificacionUsuario(event) {
+  event.preventDefault();
 
-//bien
-function ingresarElementoEnArray(elemento, listaLS, codigoPintarTabla) {
-  let elementosArray = obtenerContenidoLS(listaLS); //registro siempre en listaRegistro
-  elementosArray.push(elemento);
-  actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla);
+  const boton = document.getElementById("btnGuardarCambios");
+  let index = boton.getAttribute('data-index');
 
-}
-//bien
-function actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla) {
-  localStorage.setItem(listaLS, JSON.stringify(elementosArray));
-  capturarTabla(IDimportantes(2), listaLS, codigoPintarTabla);
-}
+  let elementosArray = obtenerContenidoLS(codigosLocalStorage(0));
+  const campo1 = document.getElementById('campo1');
+  const campo2 = document.getElementById('campo2');
+  const campo3 = document.getElementById('campo3');
 
-//parece bien
-function obtenerContenidoLS(listaLS) {
-  let devuelvoArray = [];
-  const arrayLocalStorage = localStorage.getItem(listaLS);
-  if (arrayLocalStorage) {
-
-    devuelvoArray = JSON.parse(arrayLocalStorage);
+  const elementoModificado = {
+    nombre: campo1.value,
+    correo: campo2.value,
+    numero: campo3.value,
+    validacionCorreo: elementosArray[index].validacionCorreo,
+    validacionNumero: elementosArray[index].validacionNumero,
   }
-  return devuelvoArray;
-}
-//parece bien, debe funcionar en dos listas (diferenciar caso borrado en lista propia y en lista ajena)
-function borrarElemento(index, listaLS, codigoPintarTabla) {
-  let elementosArray = obtenerContenidoLS(listaLS);
-  if (codigoPintarTabla === 1) {
-    ingresarElementoEnArray(elementosArray[index], codigosLocalStorage(2), 999); //solo si borro usuario dado de alta
+  
+  if (aprobarIngresoUsuario(elementoModificado)) {
+    elementosArray[index] = elementoModificado;
+    actualizarArrayLS(elementosArray, codigosLocalStorage(0), 0);
+    pintarTablaDeElementos(IDimportantes(2), codigosLocalStorage(0), 0);
+    $('#miModal').modal('hide');
+  } else {
+    alert("No se pudo realizar la acción, algun campo tiene informacion invalida");
   }
-  elementosArray.splice(index, 1);
-  actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla);
-  capturarTabla(IDimportantes(2), listaLS, codigoPintarTabla);
 }
-
 function capturarTabla(IDelemento, listaLS, codigoPintarTabla) {
   const tabla = document.getElementById(IDelemento);
   tabla.innerHTML = "";
@@ -223,28 +212,6 @@ function pintarTituloTabla(etiqueta,codigoTitulos){
      break;
   }
 }
-function RestaurarElemento(index, listaLS, codigoPintarTabla) {
-  let elementosArray = obtenerContenidoLS(listaLS);
-  ingresarElementoEnArray(elementosArray[index], codigosLocalStorage(1), 999);
-  console.log("Usuario:", elementosArray[index].nombre, " Restaurado con exito");
-  borrarElemento(index, listaLS, codigoPintarTabla);
-}
-function darAltaUsuario(index, listaLS, codigoPintarTabla) {
-  let arrayElementos = obtenerContenidoLS(listaLS);
-  let usuario = arrayElementos[index];
-  if (aprobarAltaUsuario(usuario)) {
-    ingresarElementoEnArray(usuario, codigosLocalStorage(1), 100);//puede mejorar, se envia 100 para no imprimir nada y en la siguiente funcion se corrige con la tabla Alta
-    borrarElemento(index, listaLS, codigoPintarTabla);
-  }
-}
-function aprobarAltaUsuario(usuario) {
-  if (usuario.validacionCorreo === true && usuario.validacionNumero === true) {
-    return true;
-  } else {
-    alert("No puede darse el alta sin Validar Correo y Numero");
-    return false;
-  }
-}
 function pintarFormularioRegistro(parametro) {
   parametro.innerHTML = "";
   parametro.innerHTML += `
@@ -266,6 +233,96 @@ function pintarFormularioRegistro(parametro) {
   
 </form>
   `;
+}
+function ingresarElementoEnArray(elemento, listaLS, codigoPintarTabla) {
+  let elementosArray = obtenerContenidoLS(listaLS); //registro siempre en listaRegistro
+  elementosArray.push(elemento);
+  actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla);
+
+}
+function borrarElemento(index, listaLS, codigoPintarTabla) {
+  let elementosArray = obtenerContenidoLS(listaLS);
+  if (codigoPintarTabla === 1) {
+    ingresarElementoEnArray(elementosArray[index], codigosLocalStorage(2), 999); //solo si borro usuario dado de alta
+  }
+  elementosArray.splice(index, 1);
+  actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla);
+  capturarTabla(IDimportantes(2), listaLS, codigoPintarTabla);
+}
+function RestaurarElemento(index, listaLS, codigoPintarTabla) {
+  let elementosArray = obtenerContenidoLS(listaLS);
+  ingresarElementoEnArray(elementosArray[index], codigosLocalStorage(1), 999);
+  console.log("Usuario:", elementosArray[index].nombre, " Restaurado con exito");
+  borrarElemento(index, listaLS, codigoPintarTabla);
+}
+function actualizarArrayLS(elementosArray, listaLS, codigoPintarTabla) {
+  localStorage.setItem(listaLS, JSON.stringify(elementosArray));
+  capturarTabla(IDimportantes(2), listaLS, codigoPintarTabla);
+}
+function obtenerContenidoLS(listaLS) {
+  let devuelvoArray = [];
+  const arrayLocalStorage = localStorage.getItem(listaLS);
+  if (arrayLocalStorage) {
+
+    devuelvoArray = JSON.parse(arrayLocalStorage);
+  }
+  return devuelvoArray;
+}
+function aprobarAltaUsuario(usuario) {
+  if (usuario.validacionCorreo === true && usuario.validacionNumero === true) {
+    return true;
+  } else {
+    alert("No puede darse el alta sin Validar Correo y Numero");
+    return false;
+  }
+}
+function darAltaUsuario(index, listaLS, codigoPintarTabla) {
+  let arrayElementos = obtenerContenidoLS(listaLS);
+  let usuario = arrayElementos[index];
+  if (aprobarAltaUsuario(usuario)) {
+    ingresarElementoEnArray(usuario, codigosLocalStorage(1), 100);//puede mejorar, se envia 100 para no imprimir nada y en la siguiente funcion se corrige con la tabla Alta
+    borrarElemento(index, listaLS, codigoPintarTabla);
+  }
+}
+function aprobarIngresoUsuario(usuario) {
+  if (usuario.numero < 1000000) {
+    return false;
+  }
+  else {
+    return /^[a-zA-ZÁáÉéÍíÓóÚúÜüÑñ ']+$/.test(usuario.nombre);
+  }
+
+}
+function limpiarYenfocarPrimerImput(idElemento, valorImput) {
+  document.getElementById(idElemento).reset();
+  const primerCampo = document.querySelector('input[type="' + valorImput + '"]');
+  primerCampo.focus();
+}
+function removerEtiqueta(parametro) {
+  if (parametro) {
+    parametro.remove();
+  }
+}
+function dispararModalUsuario(index, nombreLista) {
+  $('#miModal').modal('show');
+  let elementosArray = obtenerContenidoLS(nombreLista);
+  const campo1 = document.getElementById('campo1');
+  const campo2 = document.getElementById('campo2');
+  const campo3 = document.getElementById('campo3');
+
+  //recupero la informacion para mostrar en los imputs
+  campo1.value = elementosArray[index].nombre;
+  campo2.value = elementosArray[index].correo;
+  campo3.value = elementosArray[index].numero;
+
+  //guardo el indice dentro de los atributos del boton guardar cambios
+  const boton = document.getElementById("btnGuardarCambios");
+  boton.setAttribute('data-index', index);
+
+}
+function cerrarModalUsuario(){
+  $('#miModal').modal('hide');
+
 }
 function controladorBotonVerificar(id) {
   let [nombreBoton, index] = id.split(":"); //obtengo nombre del boton e ID
@@ -319,86 +376,7 @@ function controladorBotonVerificar(id) {
 }
 
 
-//ta bien
-function aprobarIngresoUsuario(usuario) {
-  if (usuario.numero < 1000000) {
-    return false;
-  }
-  else {
-    return /^[a-zA-ZÁáÉéÍíÓóÚúÜüÑñ ']+$/.test(usuario.nombre);
-  }
-
-}
-//ta bien
-function limpiarYenfocarPrimerImput(idElemento, valorImput) {
-  document.getElementById(idElemento).reset();
-  const primerCampo = document.querySelector('input[type="' + valorImput + '"]');
-  primerCampo.focus();
-}
-function removerEtiqueta(parametro) {
-  if (parametro) {
-    parametro.remove();
-  }
-}
-
-
-//----------------------------funciones para modificar usuario------------------------------------------------------------
-
-
-
-function dispararModalUsuario(index, nombreLista) {
-  $('#miModal').modal('show');
-  let elementosArray = obtenerContenidoLS(nombreLista);
-  const campo1 = document.getElementById('campo1');
-  const campo2 = document.getElementById('campo2');
-  const campo3 = document.getElementById('campo3');
-
-  //recupero la informacion para mostrar en los imputs
-  campo1.value = elementosArray[index].nombre;
-  campo2.value = elementosArray[index].correo;
-  campo3.value = elementosArray[index].numero;
-
-  //guardo el indice dentro de los atributos del boton guardar cambios
-  const boton = document.getElementById("btnGuardarCambios");
-  boton.setAttribute('data-index', index);
-
-}
-function cerrarModalUsuario(){
-  $('#miModal').modal('hide');
-
-}
-
-// Función que captura el evento submit y modifica el array
-function formularioModificacionUsuario(event) {
-  event.preventDefault();
-
-  const boton = document.getElementById("btnGuardarCambios");
-  let index = boton.getAttribute('data-index');
-
-  let elementosArray = obtenerContenidoLS(codigosLocalStorage(0));
-  const campo1 = document.getElementById('campo1');
-  const campo2 = document.getElementById('campo2');
-  const campo3 = document.getElementById('campo3');
-
-  //estas lineas son para tener los imputs con la informacion y no vacios
-  const elementoModificado = {
-    nombre: campo1.value,
-    correo: campo2.value,
-    numero: campo3.value,
-    validacionCorreo: elementosArray[index].validacionCorreo,
-    validacionNumero: elementosArray[index].validacionNumero,
-  }
-  if (aprobarIngresoUsuario(elementoModificado)) {
-    elementosArray[index] = elementoModificado;
-    actualizarArrayLS(elementosArray, codigosLocalStorage(0), 0);
-    pintarTablaDeElementos(IDimportantes(2), codigosLocalStorage(0), 0);
-    $('#miModal').modal('hide');
-  } else {
-    alert("No se pudo realizar la acción, algun campo tiene informacion invalida");
-  }
-}
-
-//---------------------------------COSAS FUERA DE FUNCIONES------------------------------------
+//---------------------------------ACCIONES FUERA DE FUNCIONES------------------------------------
 
 const botonUsuariosRegistrados = document.getElementById(IDimportantes(4));
 const botonUsuariosAlta = document.getElementById(IDimportantes(5));
