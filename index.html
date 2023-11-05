@@ -10,10 +10,10 @@
 </head>
 
 <body class="bg-body-tertiary">
-  <div class="container text-center mt-4">
+  <div class="container m-auto text-center mt-4">
     <h1><b>GESTION DE USUARIOS</b></h1>
   </div>
-  <div class="container text-center mt-4 mb-5">
+  <div class="container m-auto text-center mt-4 mb-5">
     <div class="flex-row">
       <button id="botonUsuariosRegistrados" class="btn btn-lg btn-primary" type="button"><b>Usuarios Registrados</b></button>
       <button id="botonUsuariosAlta" class="btn btn-lg btn-success" type="button"><b>Usuarios en Alta</b></button>
@@ -21,19 +21,15 @@
     </div>
   </div>
 
-  <div id="contenedorFormularioRegistro" class="container">
+  <div id="contenedorFormularioRegistro" class="container m-auto">
 
   </div>
   <div class="container">
     <hr />
-    <table class="table ">
+    <table class="table w-100">
       <thead >
-        <tr class="bg-body-secondary ">
-          <th  scope="col">#</th>
-          <th scope="col">Nombre Completo </th>
-          <th scope="col" ><span>Correo Electronico</span><span class="mx-5"></span><span>Validado</span></th>
-          <th scope="col"><span>Telefono</span><span class="mx-3"></span><span>Validado</span></th>
-          <th class="text-center" scope="col">Acciones</th>
+        <tr class="bg-body-secondary" id="titulosTablaTr">
+
         </tr>
       </thead>
       <tbody id="tablaUsuarios"></tbody>
@@ -45,30 +41,30 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="miModalLabel">Modificar Elemento</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <button type="button" class="close" data-dismiss="modal" onclick="cerrarModalUsuario()" aria-label="Cerrar">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <!-- Tu formulario aquí -->
-          <form id="formularioModificacion" onsubmit="manejarf34t43t63gf3Usuario(evento)">
+          <form id="formularioModificacion" onsubmit="formularioModificacionUsuario(event)">
             <!-- Campos del formulario -->
             <div class="mb-3">
+              <label for="campo2" class="form-label">Nombre Completo</label>
+              <input type="text" class="form-control" id="campo1" name="name2" required />
+            </div>
+            <div class="mb-3">
               <label for="campo1" class="form-label">Correo Electronico</label>
-              <input type="email" class="form-control" id="campo1" name="email2" required />
+              <input type="email" class="form-control" id="campo2" name="email2" required />
             </div>
 
-            <div class="mb-3">
-              <label for="campo2" class="form-label">Nombre Completo</label>
-              <input type="text" class="form-control" id="campo2" name="name2" required />
-            </div>
             <div class="mb-3">
               <label for="campo3" class="form-label">Numero de telefono</label>
               <input type="number" class="form-control" id="campo3" name="number2" required />
             </div>
           
             <div>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cerrarModalUsuario()">
                 Cerrar
               </button>
               <button  type="submit"  id="btnGuardarCambios" class="btn btn-primary" >
