@@ -9,38 +9,30 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
 
-<body>
-  <div class="container text-center mt-3">
-    <h1>Gestion de Usuarios</h1>
+<body class="bg-body-tertiary">
+  <div class="container text-center mt-4">
+    <h1><b>GESTION DE USUARIOS</b></h1>
+  </div>
+  <div class="container text-center mt-4 mb-5">
+    <div class="flex-row">
+      <button id="botonUsuariosRegistrados" class="btn btn-lg btn-primary" type="button"><b>Usuarios Registrados</b></button>
+      <button id="botonUsuariosAlta" class="btn btn-lg btn-success" type="button"><b>Usuarios en Alta</b></button>
+      <button id="botonUsuariosborrados" class="btn btn-lg btn-danger"type="button"><b>Usuarios Eliminados</b></button>
+    </div>
   </div>
 
+  <div id="contenedorFormularioRegistro" class="container">
+
+  </div>
   <div class="container">
-    <form id="formularioUsuario" onsubmit="manejarImputFormularioDeUsuarios(event)">
-      <div class="mb-3">
-        <label for="inputEmail" class="form-label">Correo Electronico</label>
-        <input type="email" class="form-control" id="inputEmail" name="email" required />
-      </div>
-
-      <div class="mb-3">
-        <label for="inputName" class="form-label">Nombre Completo</label>
-        <input type="text" class="form-control" id="inputName" name="name" required />
-      </div>
-      <div class="mb-3">
-        <label for="inputNumber" class="form-label">Numero de telefono</label>
-        <input type="number" class="form-control" id="inputNumber" name="number" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Enviar</button>
-      
-    </form>
-
     <hr />
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nombre Completo</th>
-          <th scope="col">Correo Electronico</th>
-          <th scope="col">Numero de Telefono</th>
+    <table class="table ">
+      <thead >
+        <tr class="bg-body-secondary ">
+          <th  scope="col">#</th>
+          <th scope="col">Nombre Completo </th>
+          <th scope="col" ><span>Correo Electronico</span><span class="mx-5"></span><span>Validado</span></th>
+          <th scope="col"><span>Telefono</span><span class="mx-3"></span><span>Validado</span></th>
           <th class="text-center" scope="col">Acciones</th>
         </tr>
       </thead>
@@ -59,7 +51,7 @@
         </div>
         <div class="modal-body">
           <!-- Tu formulario aquí -->
-          <form id="formularioModificacion" onsubmit="realizarModificacion(evento)">
+          <form id="formularioModificacion" onsubmit="manejarf34t43t63gf3Usuario(evento)">
             <!-- Campos del formulario -->
             <div class="mb-3">
               <label for="campo1" class="form-label">Correo Electronico</label>
