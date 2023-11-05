@@ -98,6 +98,7 @@ function limpiarYenfocarPrimerImput(idElemento, valorImput) {
 
 //----------------------------funciones para modificar usuario------------------------------------------------------------
 
+//se activa con el click en el boton modificar
 function dispararModalUsuario(index, nombreLista) {
   $('#miModal').modal('show');
   let elementosArray = obtenerContenidoLS(nombreLista);
@@ -135,8 +136,7 @@ function realizarModificacion(event) {
   actualizarArrayLS("listaUsuarios", elementosArray);
   crearTablaDeElementos("listaUsuarios");
   $('#miModal').modal('hide');
-
-
+  
 }
-// Asociar la función abrirModal al botón3423423
+
 
